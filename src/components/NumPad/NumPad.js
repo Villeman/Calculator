@@ -4,16 +4,20 @@ import './NumPad.css'
 
 class NumPad extends React.Component {
     constructor(props) {
-        super(props);
-        
-        this.alertNumber = () => {
-            console.log('Button pressed')
-        }
+        super(props)
         this.state = {
-            };
-      }
+            lastSymbol: "0"
+        };
+    }
+    receiveSymbol = (sym) => {
+        this.setState({
+            lastSymbol: sym
+        }, function () {
+            console.log(this.state.lastSymbol);
+        });
+    }
       renderButton (i) {
-        return <CalcButton numberClick = {this.alertNumber} key={'key-'+i} value={i}/>
+        return <CalcButton onNumberClicked = {this.receiveSymbol} key={'key-'+i} value={i}/>
     }
 
 
@@ -24,7 +28,7 @@ class NumPad extends React.Component {
 
     render () {
         return (
-            <div className="numPad">
+            <div onClick={this.props.onNumKeyPress} className="numPad">
               {this.numPadButtons}
             </div>
         )

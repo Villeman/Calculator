@@ -7,22 +7,11 @@ import OperatorPanel from '../OperatorPanel'
 class Keyboard extends React.Component {
 
 
-
-
-
-
-
-
-
-
-
-
-
     render () {
         return (
             <div className="keyboard">
                 <ServicePanel/>
-                    <NumPad />
+                    <NumPad onNumKeyPress={() => console.log('pressed num')}/>
                 <OperatorPanel/>
             </div>
         )

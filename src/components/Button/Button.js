@@ -3,19 +3,11 @@ import './Button.css'
 
 class CalcButton extends React.Component {
     
-        clickHandler = () => {
-            console.log('pow')
-            console.log (this.props)
-        }
         
 
-
-        keyDownHandler = () => {
-        };
-    
         render () {
         return (
-            <button onClick = {this.clickHandler} className="calcButton">
+            <button onClick = {() => this.props.onNumberClicked(this.props.value)} className="calcButton">
             {this.props.value}</button>
         )
     }
