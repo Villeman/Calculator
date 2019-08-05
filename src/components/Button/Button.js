@@ -2,20 +2,20 @@ import React from "react"
 import './Button.css'
 
 class CalcButton extends React.Component {
-    constructor() {
-        super();
+    
+        clickHandler = () => {
+            console.log('pow')
+            console.log (this.props)
+        }
+        
 
-        this.clickHandler = () => {
-            console.log('Button pressed')
+
+        keyDownHandler = () => {
         };
-
-
-        this.keyDownHandler = () => {
-        };
-    }
+    
         render () {
         return (
-            <button onClick={this.clickHandler} className="calcButton">
+            <button onClick = {this.clickHandler} className="calcButton">
             {this.props.value}</button>
         )
     }

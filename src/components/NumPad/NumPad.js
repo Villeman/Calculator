@@ -1,18 +1,19 @@
 import React from "react"
 import CalcButton from '../Button'
 import './NumPad.css'
+
 class NumPad extends React.Component {
     constructor(props) {
         super(props);
         
         this.alertNumber = () => {
-            console.log('Button press detected')
+            console.log('Button pressed')
         }
         this.state = {
             };
       }
       renderButton (i) {
-        return <CalcButton numberClickDetected = {()=>console.log('num click detected')} key={'key-'+i} value={i}/>
+        return <CalcButton numberClick = {this.alertNumber} key={'key-'+i} value={i}/>
     }
 
 
