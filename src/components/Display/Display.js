@@ -1,17 +1,15 @@
 import React from "react"
-import '../index.css'
+import './Display.css'
 
 class Display extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            displayValue: 0};
-      }
+    state = {
+        displayedValue: 0
+    }
     
     render () {
         return (
             <div className="displayArea">
-                <p className="displayValue">{this.state.displayValue}</p>
+                <p className="displayValue">{this.props.displayedValue}</p>
             </div>
         )
     }

@@ -1,0 +1,7 @@
+.mainPlate {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    max-width: 240px;
+    margin: 0 auto;
+  }

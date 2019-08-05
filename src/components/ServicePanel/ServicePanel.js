@@ -1,6 +1,6 @@
 import React from "react"
-import CalcButton from '../components/Button.js'
-import '../index.css'
+import CalcButton from '../Button'
+import './ServicePanel.css'
 class ServicePanel extends React.Component {
     constructor(props) {
         super(props);
@@ -8,15 +8,17 @@ class ServicePanel extends React.Component {
             };
       }
     renderButton (i) {
-        return <CalcButton value={i}/>
+        return <CalcButton key={'key-'+i} value={i}/>
     }
-
+    operatorSymbols = ['AC', '±', '%']
+    operatorButtons = this.operatorSymbols.map((symbol)=> {
+        return this.renderButton(symbol)
+    })
+  
     render () {
         return (
             <div className="servicePanel">
-                {this.renderButton('AC')}
-                {this.renderButton('±')}
-                {this.renderButton('%')}
+              {this.operatorButtons}
             </div>
         )
     }

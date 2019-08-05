@@ -1,0 +1,17 @@
+.calcButton {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    color: #FFF;
+    border: 1px solid #000;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  .buttonSymbol {
+    margin: 0;
+    color: #FFF;
+    font-size: 15px;
+  }

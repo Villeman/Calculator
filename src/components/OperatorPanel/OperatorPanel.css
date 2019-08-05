@@ -1,0 +1,9 @@
+.operatorPanel {
+  display: flex;
+  flex-direction: column;  
+}
+
+.operatorPanel .calcButton {
+  background-color: rgb(236, 165, 84);
+  font-size: 30px;
+}
