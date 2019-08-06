@@ -3,24 +3,57 @@ import './App.css'
 import MainPlate from '../MainPlate'
 import Display from '../Display'
 import Keyboard from '../Keyboard'
+import * as math from 'mathjs'
 
 export default class App extends React.Component {
   state = {
     lastReceivedSymbol: null,
     displayedValue: '0',
-    firstOperand: null,
-    secondOperand: null,
+    firstOperand: 0,
+    secondOperand: 0,
     operator: null,
-    operatorSet: false,
-    pointSet: false
+    operatorJustSet: 0,
+    pointSet: 0
   }  
   receiveSymbol = (val) => {
     this.setState({ lastReceivedSymbol: val }, () => {
         this.inputParser(val)
     })
   }
-  setOperator = (val) => { 
+  setOperator = (val) => {
+      if (val==='÷'){
+        val = '/'
+      }
+      if (val==='×'){
+        val = '*'
+      }
+      this.setState({ operator: val, operatorJustSet: 1}, () => {
+        console.log(this.state.operator)
+        if(this.state.operator) {
+          this.setFirstOperand(parseFloat(this.state.displayedValue))
+        }
+      })
+    }
 
+  
+  toggleSign = () => {
+
+  }
+  setFirstOperand = (val) => { 
+    this.setState({ firstOperand: val}, () => {})
+  }
+  setSecondOperand = (val) => { 
+    this.setState({ secondOperand: val}, () => {})
+  }
+  calculate = () => {
+    this.setState({ secondOperand: this.state.displayedValue}, () => {
+      const expression = this.state.firstOperand+this.state.operator+this.state.secondOperand
+      this.setState({ displayedValue: math.evaluate(expression)}, () => {
+
+      })
+    })
+    
+    
   }
   appendDisplay = (val) => {
     if (this.state.displayedValue === '0') {
@@ -29,56 +62,58 @@ export default class App extends React.Component {
     else {
       this.setState({ displayedValue: this.state.displayedValue+val}, () => {})
     }
-  } 
-  setPoint = () => {
-    if(!this.state.pointSet)
-    {
-      this.setState({ displayedValue: this.state.displayedValue+'.', pointSet: true}, () => {})
+    if(this.state.operatorJustSet) {
+      this.clearDisplay(val)
     }
   }
-  clearDisplay = () => {
-    this.setState({ displayedValue: '0'}, () => {})
+  
+  setPoint = () => {
+    if(!this.state.pointSet) {
+      this.setState({ displayedValue: this.state.displayedValue+'.', pointSet: 1}, () => {})
+    }
   }
+  clearDisplay = (val) => {
+    this.setState({ displayedValue:val,operatorJustSet:0,pointSet:0}, () => {})
+  }
+
   clearAll = () => {
-    console.log('Clearing display')
-    this.setState({ displayedValue: '0', firstOperand: null, 
-      secondOperand: null, operatorSet: false, pointSet: false}, () => {})
+    console.log('Clearing all')
+    this.setState({ displayedValue: '0', firstOperand: 0, 
+      secondOperand: 0, operator:null, operatorSet: 0, pointSet: 0}, () => {})
   }
 
   inputParser = (val) => { 
-    console.log('input parser received '+ this.state.lastReceivedSymbol)
-    switch (true) {
-      case(val ==='AC'):
+    if(val === 'AC') {
         this.clearAll()
-      break;
-      case(val ==='.'):
-        this.setPoint()
-      break;
-      case(!Number.isInteger(val)):
-        console.log(Number.isInteger(val))
-        // this.appendDisplay(val);
-        break;
-      default:
-        break;
+    }
+    else if(val === '.') {
+      this.setPoint()
+    }
+    else if(val === '±') {
+      this.toggleSign()
+    }
+    else if(val === '=') {
+      this.calculate()
+    }
+    else if(Number.isInteger(parseInt(val, 10))) {
+      this.appendDisplay(val)
+    }
+    else {
+      this.setOperator(val);
     }
   }
-
-  
-
-
-
-
   render() {
     return (
       <MainPlate>
         <Display value={this.state.displayedValue} />
-        <Keyboard onNumberClick={this.receiveSymbol} 
-                                                    />
+        <Keyboard onNumberClick={this.receiveSymbol} />
+        <p>{this.state.firstOperand}</p>
+        <p>{this.state.operator}   {this.state.operatorSet}</p>
+        <p>{this.state.secondOperand}</p>
+        <p>{this.state.pointSet}</p>
       </MainPlate>
-    
     )
   }
-  
 }
 
 

@@ -31,7 +31,6 @@ class Keyboard extends React.Component {
     numPadButtons = this.numPadSymbols.map((symbol)=> {
         return this.renderButton(symbol)
     })
-
     
     render () {
         return (
