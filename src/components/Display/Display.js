@@ -5,11 +5,12 @@ class Display extends React.Component {
     state = {
         displayedValue: 0
     }
+
     
     render () {
         return (
-            <div className="displayArea">
-                <p className="displayValue">{this.props.displayedValue}</p>
+            <div className="displayArea" >
+                <p className="displayValue">{this.props.value}</p>
             </div>
         )
     }

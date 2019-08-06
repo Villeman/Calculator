@@ -1,5 +1,8 @@
+body {
+  padding-top: 20px;
+}
 .displayArea {
-    padding: 0 2px;
+    padding: 0 10px;
     height: 40px;
     width: 240px;
     background-color: #FFF;
