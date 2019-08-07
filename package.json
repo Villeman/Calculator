@@ -8,6 +8,7 @@
     "package.json": "^2.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-key-handler": "^1.2.0-beta.3",
     "react-keyboard-event-handler": "^1.5.1",
     "react-scripts": "3.0.1",
     "react-textfit": "^1.1.0"

@@ -7,7 +7,6 @@ import * as math from 'mathjs'
 
 export default class App extends React.Component {
   state = {
-    lastReceivedSymbol: null,
     displayedValue: '0',
     firstOperand: 0,
     secondOperand: 0,
@@ -20,9 +19,7 @@ export default class App extends React.Component {
         this.inputParser(val)
     })
   }
-  keyboardHandler = (event) => {
-    this.inputParser(event.key)
-  }
+ 
   setOperator = (val) => {
       if (val==='÷'){
         val = '/'
@@ -36,30 +33,32 @@ export default class App extends React.Component {
         }
       })
     }
-
-  
   toggleSign = () => {
-
+    this.setState({ displayedValue: (math.evaluate(this.state.displayedValue*-1))}, () => {})
   }
+  
   setFirstOperand = (val) => { 
     this.setState({ firstOperand: val}, () => {})
   }
+
   setSecondOperand = (val) => { 
     this.setState({ secondOperand: val}, () => {})
   }
+
   calculate = () => {
     this.setState({ secondOperand: this.state.displayedValue}, () => {
-      if(this.state.secondOperand === 0 && this.state.operator==='/') {
-        this.setState({ displayedValue: 'Divide by zero error'}, () => {
-          // this.clearAll()
-        })       
-      }
-      else {
-          const expression = this.state.firstOperand+this.state.operator+this.state.secondOperand
-          this.setState({ displayedValue: math.evaluate(expression)}, () => {})         
-      }
+      const expression = this.state.firstOperand+this.state.operator+this.state.secondOperand
+          this.setState({ displayedValue: (math.evaluate(expression)), }, () => {})         
     })
   }
+
+  calculatePercentage = () => {
+    this.setState({ secondOperand: this.state.displayedValue}, () => {
+      const expression = this.state.firstOperand+this.state.operator+(this.state.firstOperand/100*this.state.secondOperand)
+          this.setState({ displayedValue: (math.evaluate(expression))}, () => {})         
+    })
+  }
+
   appendDisplay = (val) => {
     if (this.state.displayedValue === '0') {
       this.setState({ displayedValue: val}, () => {})
@@ -71,12 +70,13 @@ export default class App extends React.Component {
       this.clearDisplay(val)
     }
   }
-  
+
   setPoint = () => {
     if(!this.state.pointSet) {
       this.setState({ displayedValue: this.state.displayedValue+'.', pointSet: 1}, () => {})
     }
   }
+
   clearDisplay = (val) => {
     this.setState({ displayedValue:val,operatorJustSet:0,pointSet:0}, () => {})
   }
@@ -85,9 +85,20 @@ export default class App extends React.Component {
     this.setState({ displayedValue: '0', firstOperand: 0, 
       secondOperand: 0, operator:null, operatorSet: 0, pointSet: 0}, () => {})
   }
+
   inputParser = (val) => {
-    if(val === 'AC') {
+    if(val === 'AC' || val === 'Delete') {
         this.clearAll()
+    }
+    else if(val === 'Backspace') {
+      let displayed = this.state.displayedValue
+      if (displayed.length > 1) {
+        this.setState({ displayedValue: this.state.displayedValue.substr(0, this.state.displayedValue.length-1)}, () => {
+        })
+      }
+      else {
+        this.clearAll()
+      }
     }
     else if(val === '.') {
       this.setPoint()
@@ -95,8 +106,15 @@ export default class App extends React.Component {
     else if(val === '±') {
       this.toggleSign()
     }
+    else if(val === '%') {
+      this.calculatePercentage()
+    }
     else if(val === '=' || val==='Enter') {
-      this.calculate()
+      if(this.state.displayedValue === '0' && this.state.operator==='/') {
+        this.clearAll()
+        alert('Divide by zero error');
+      }
+      else this.calculate()
     }
     else if(/[0-9]/.test(val)) {
       this.appendDisplay(val)
@@ -104,19 +122,17 @@ export default class App extends React.Component {
     else if('+-÷×/*'.includes(val)) {
       this.setOperator(val)
     }
+    else {}
   }
+
   render() {
     let sendToDisplay = this.state.displayedValue
     sendToDisplay = parseFloat(sendToDisplay)
     sendToDisplay = +sendToDisplay.toFixed(10)
     return (
-      <MainPlate clickKey={this.keyboardHandler} tabIndex={0}>
+      <MainPlate tabIndex={0}>
         <Display value={sendToDisplay} />
         <Keyboard onNumberClick={this.receiveSymbol} />
-        <p>{this.state.firstOperand}</p>
-        <p>{this.state.operator}   {this.state.operatorSet}</p>
-        <p>{this.state.secondOperand}</p>
-        <p>{this.state.pointSet}</p>
       </MainPlate>
     )
   }

@@ -4,6 +4,11 @@
 }
 
 .operatorPanel .calcButton {
-  background-color: rgb(236, 165, 84);
-  font-size: 30px;
+  background-color: #FC9C17;
+  font-size: 25px;
+  font-weight: lighter
+}
+
+.operatorPanel .calcButton:hover {
+  background-color:#ff8c1a;
 }

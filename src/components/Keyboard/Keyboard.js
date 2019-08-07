@@ -4,25 +4,30 @@ import './NumPad.css'
 import './ServicePanel.css'
 import './OperatorPanel.css'
 import CalcButton from '../Button'
-import KeyboardEventHandler from 'react-keyboard-event-handler'
-
+import KeyHandler, { KEYDOWN } from 'react-key-handler';
 
 class Keyboard extends React.Component {
     state = {
-        lastPressedNum:0,
-        lastPressedOperator:0
+        lastPressedButton: 0
     }
     receiveSymbol = (val) => {
-        this.setState({ lastPressedNum: val }, () => {
-            this.props.onNumberClick(this.state.lastPressedNum)
+        this.setState({ lastPressedButton: val }, () => {
+            this.props.onNumberClick(this.state.lastPressedButton)
         })
     }
     renderButton (i) {
         return <CalcButton onNumberClicked = {this.receiveSymbol} key={'key-'+i} value={i}/>
     }
+    addKeyHandler = (keyValue) => {
+        return <KeyHandler key={'key-'+keyValue} keyValue={keyValue} keyEventName={KEYDOWN} onKeyHandle={this.keyboardHandler} />
+    }
+    keyboardHandler = (event) => {
+        this.receiveSymbol(event.key)
+    }
     numPadSymbols = ['0', '.', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     operatorSymbols = ['÷', '×', '-', '+', '=']
     serviceSymbols = ['AC', '±', '%']
+    auxSymbols = ['Enter', '/', '*', 'Delete', 'Backspace']
     serviceButtons = this.serviceSymbols.map((symbol)=> {
         return this.renderButton(symbol)
     })
@@ -32,14 +37,18 @@ class Keyboard extends React.Component {
     numPadButtons = this.numPadSymbols.map((symbol)=> {
         return this.renderButton(symbol)
     })
-    
+    keySymbols = [...this.numPadSymbols, ...this.operatorSymbols,...this.serviceSymbols, ...this.auxSymbols]
+    keyHandlers = this.keySymbols.map((keySymbol)=>{
+        return this.addKeyHandler(keySymbol)
+    })
     render () {
         return (
-            <KeyboardEventHandler className="keyboard" onKeyEvent={(key) => this.receiveSymbol(key)}>
+            <div className="keyboard">
+                {this.keyHandlers}
                 <div className="servicePanel">{this.serviceButtons}</div>
                 <div className="numPad">{this.numPadButtons}</div>
                 <div className="operatorPanel">{this.operatorButtons}</div>
-            </KeyboardEventHandler>
+            </div>
         )
     }
 }
