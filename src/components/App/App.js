@@ -20,6 +20,9 @@ export default class App extends React.Component {
         this.inputParser(val)
     })
   }
+  keyboardHandler = (event) => {
+    this.inputParser(event.key)
+  }
   setOperator = (val) => {
       if (val==='÷'){
         val = '/'
@@ -28,7 +31,6 @@ export default class App extends React.Component {
         val = '*'
       }
       this.setState({ operator: val, operatorJustSet: 1}, () => {
-        console.log(this.state.operator)
         if(this.state.operator) {
           this.setFirstOperand(parseFloat(this.state.displayedValue))
         }
@@ -47,13 +49,16 @@ export default class App extends React.Component {
   }
   calculate = () => {
     this.setState({ secondOperand: this.state.displayedValue}, () => {
-      const expression = this.state.firstOperand+this.state.operator+this.state.secondOperand
-      this.setState({ displayedValue: math.evaluate(expression)}, () => {
-
-      })
+      if(this.state.secondOperand === 0 && this.state.operator==='/') {
+        this.setState({ displayedValue: 'Divide by zero error'}, () => {
+          // this.clearAll()
+        })       
+      }
+      else {
+          const expression = this.state.firstOperand+this.state.operator+this.state.secondOperand
+          this.setState({ displayedValue: math.evaluate(expression)}, () => {})         
+      }
     })
-    
-    
   }
   appendDisplay = (val) => {
     if (this.state.displayedValue === '0') {
@@ -77,12 +82,10 @@ export default class App extends React.Component {
   }
 
   clearAll = () => {
-    console.log('Clearing all')
     this.setState({ displayedValue: '0', firstOperand: 0, 
       secondOperand: 0, operator:null, operatorSet: 0, pointSet: 0}, () => {})
   }
-
-  inputParser = (val) => { 
+  inputParser = (val) => {
     if(val === 'AC') {
         this.clearAll()
     }
@@ -92,20 +95,23 @@ export default class App extends React.Component {
     else if(val === '±') {
       this.toggleSign()
     }
-    else if(val === '=') {
+    else if(val === '=' || val==='Enter') {
       this.calculate()
     }
-    else if(Number.isInteger(parseInt(val, 10))) {
+    else if(/[0-9]/.test(val)) {
       this.appendDisplay(val)
     }
-    else {
-      this.setOperator(val);
+    else if('+-÷×/*'.includes(val)) {
+      this.setOperator(val)
     }
   }
   render() {
+    let sendToDisplay = this.state.displayedValue
+    sendToDisplay = parseFloat(sendToDisplay)
+    sendToDisplay = +sendToDisplay.toFixed(10)
     return (
-      <MainPlate>
-        <Display value={this.state.displayedValue} />
+      <MainPlate clickKey={this.keyboardHandler} tabIndex={0}>
+        <Display value={sendToDisplay} />
         <Keyboard onNumberClick={this.receiveSymbol} />
         <p>{this.state.firstOperand}</p>
         <p>{this.state.operator}   {this.state.operatorSet}</p>
