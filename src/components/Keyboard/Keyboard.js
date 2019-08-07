@@ -4,6 +4,7 @@ import './NumPad.css'
 import './ServicePanel.css'
 import './OperatorPanel.css'
 import CalcButton from '../Button'
+import KeyboardEventHandler from 'react-keyboard-event-handler'
 
 
 class Keyboard extends React.Component {
@@ -34,11 +35,11 @@ class Keyboard extends React.Component {
     
     render () {
         return (
-            <div className="keyboard">
+            <KeyboardEventHandler className="keyboard" onKeyEvent={(key) => this.receiveSymbol(key)}>
                 <div className="servicePanel">{this.serviceButtons}</div>
                 <div className="numPad">{this.numPadButtons}</div>
                 <div className="operatorPanel">{this.operatorButtons}</div>
-            </div>
+            </KeyboardEventHandler>
         )
     }
 }
