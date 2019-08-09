@@ -10,49 +10,59 @@ export default class App extends React.Component {
     displayedValue: '0',
     firstOperand: 0,
     secondOperand: 0,
+    result: 0,
     operator: null,
-    operatorJustSet: 0,
-    pointSet: 0
+    operatorJustSet: false
   }  
   receiveSymbol = (val) => {
+    console.log('receiving symbol')
     this.setState({ lastReceivedSymbol: val }, () => {
         this.inputParser(val)
     })
   }
  
   setOperator = (val) => {
+    console.log('setting operator')
       if (val==='÷'){
         val = '/'
       }
       if (val==='×'){
         val = '*'
       }
-      this.setState({ operator: val, operatorJustSet: 1}, () => {
+      this.setState({ operator: val, operatorJustSet: true}, () => {
         if(this.state.operator) {
           this.setFirstOperand(parseFloat(this.state.displayedValue))
         }
       })
     }
   toggleSign = () => {
+    console.log('toggling sign')
     this.setState({ displayedValue: (math.evaluate(this.state.displayedValue*-1))}, () => {})
   }
   
   setFirstOperand = (val) => { 
+    console.log('setting first operand')
     this.setState({ firstOperand: val}, () => {})
   }
 
   setSecondOperand = (val) => { 
+    console.log('setting second operand')
     this.setState({ secondOperand: val}, () => {})
   }
 
   calculate = () => {
+    console.log('calculating')
     this.setState({ secondOperand: this.state.displayedValue}, () => {
-      const expression = this.state.firstOperand+this.state.operator+this.state.secondOperand
-          this.setState({ displayedValue: (math.evaluate(expression)), }, () => {})         
+      const { firstOperand, operator, secondOperand } = this.state
+      let expression = firstOperand + operator + secondOperand
+      this.setState({ result: (math.evaluate(expression))}, () => {
+        this.setState({ displayedValue:this.state.result}, () => {})
+      })
     })
   }
 
   calculatePercentage = () => {
+    console.log('calculating percentage')
     this.setState({ secondOperand: this.state.displayedValue}, () => {
       const expression = this.state.firstOperand+this.state.operator+(this.state.firstOperand/100*this.state.secondOperand)
           this.setState({ displayedValue: (math.evaluate(expression))}, () => {})         
@@ -60,6 +70,7 @@ export default class App extends React.Component {
   }
 
   appendDisplay = (val) => {
+    console.log('appending display')
     if (this.state.displayedValue === '0') {
       this.setState({ displayedValue: val}, () => {})
     }
@@ -72,21 +83,25 @@ export default class App extends React.Component {
   }
 
   setPoint = () => {
-    if(!this.state.pointSet) {
-      this.setState({ displayedValue: this.state.displayedValue+'.', pointSet: 1}, () => {})
+    console.log('setting point')
+    if(!this.state.displayedValue.includes('.')) {
+      this.setState({ displayedValue: this.state.displayedValue+'.'}, () => {})
     }
   }
 
   clearDisplay = (val) => {
-    this.setState({ displayedValue:val,operatorJustSet:0,pointSet:0}, () => {})
+    console.log('clearing display')
+    this.setState({ displayedValue:val,operatorJustSet:false}, () => {})
   }
 
   clearAll = () => {
+    console.log('clearing all')
     this.setState({ displayedValue: '0', firstOperand: 0, 
-      secondOperand: 0, operator:null, operatorSet: 0, pointSet: 0}, () => {})
+      secondOperand: 0, operator:null, operatorSet: 0}, () => {})
   }
 
   inputParser = (val) => {
+    console.log('parsing input')
     if(val === 'AC' || val === 'Delete') {
         this.clearAll()
     }

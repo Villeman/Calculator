@@ -15,8 +15,8 @@ class Keyboard extends React.Component {
             this.props.onNumberClick(this.state.lastPressedButton)
         })
     }
-    renderButton (i) {
-        return <CalcButton onNumberClicked = {this.receiveSymbol} key={'key-'+i} value={i}/>
+    renderButton = arrayItem => {
+        return <CalcButton onNumberClicked = {this.receiveSymbol} key={'key-'+arrayItem} value={arrayItem}/>
     }
     addKeyHandler = (keyValue) => {
         return <KeyHandler key={'key-'+keyValue} keyValue={keyValue} keyEventName={KEYDOWN} onKeyHandle={this.keyboardHandler} />
@@ -28,15 +28,10 @@ class Keyboard extends React.Component {
     operatorSymbols = ['÷', '×', '-', '+', '=']
     serviceSymbols = ['AC', '±', '%']
     auxSymbols = ['Enter', '/', '*', 'Delete', 'Backspace']
-    serviceButtons = this.serviceSymbols.map((symbol)=> {
-        return this.renderButton(symbol)
-    })
-    operatorButtons = this.operatorSymbols.map((symbol)=> {
-        return this.renderButton(symbol)
-    })
-    numPadButtons = this.numPadSymbols.map((symbol)=> {
-        return this.renderButton(symbol)
-    })
+    
+    renderNumPadButtons = () => this.numPadSymbols.map(this.renderButton)
+    renderServiceButtons = () => this.serviceSymbols.map(this.renderButton)
+    renderOperatorButtons = () => this.operatorSymbols.map(this.renderButton)
     keySymbols = [...this.numPadSymbols, ...this.operatorSymbols,...this.serviceSymbols, ...this.auxSymbols]
     keyHandlers = this.keySymbols.map((keySymbol)=>{
         return this.addKeyHandler(keySymbol)
@@ -45,9 +40,9 @@ class Keyboard extends React.Component {
         return (
             <div className="keyboard">
                 {this.keyHandlers}
-                <div className="servicePanel">{this.serviceButtons}</div>
-                <div className="numPad">{this.numPadButtons}</div>
-                <div className="operatorPanel">{this.operatorButtons}</div>
+                <div className="servicePanel">{this.renderServiceButtons()}</div>
+                <div className="numPad">{this.renderNumPadButtons()}</div>
+                <div className="operatorPanel">{this.renderOperatorButtons()}</div>
             </div>
         )
     }
