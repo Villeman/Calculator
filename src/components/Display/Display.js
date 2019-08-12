@@ -1,12 +1,11 @@
 import React from "react"
 import './Display.css'
+import { Textfit } from 'react-textfit';
 
 class Display extends React.Component {
     render () {
         return (
-            <div className="displayArea" >
-                <div className="displayValue">{this.props.value}</div>
-            </div>
+            <Textfit  className="displayValue" mode="single" max="55">{this.props.value}</Textfit>
         )
     }
 }

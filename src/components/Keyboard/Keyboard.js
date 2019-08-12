@@ -4,7 +4,8 @@ import './NumPad.css'
 import './ServicePanel.css'
 import './OperatorPanel.css'
 import CalcButton from '../Button'
-import KeyHandler, { KEYDOWN } from 'react-key-handler';
+import KeyHandler, { KEYDOWN } from 'react-key-handler'
+import {keySymbolValues} from './constants'
 
 class Keyboard extends React.Component {
     state = {
@@ -24,15 +25,11 @@ class Keyboard extends React.Component {
     keyboardHandler = (event) => {
         this.receiveSymbol(event.key)
     }
-    numPadSymbols = ['0', '.', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    operatorSymbols = ['÷', '×', '-', '+', '=']
-    serviceSymbols = ['AC', '±', '%']
-    auxSymbols = ['Enter', '/', '*', 'Delete', 'Backspace']
     
-    renderNumPadButtons = () => this.numPadSymbols.map(this.renderButton)
-    renderServiceButtons = () => this.serviceSymbols.map(this.renderButton)
-    renderOperatorButtons = () => this.operatorSymbols.map(this.renderButton)
-    keySymbols = [...this.numPadSymbols, ...this.operatorSymbols,...this.serviceSymbols, ...this.auxSymbols]
+    renderNumPadButtons = () => keySymbolValues.numPadSymbols.map(this.renderButton)
+    renderServiceButtons = () => keySymbolValues.serviceSymbols.map(this.renderButton)
+    renderOperatorButtons = () => keySymbolValues.operatorSymbols.map(this.renderButton)
+    keySymbols = [...keySymbolValues.numPadSymbols, ...keySymbolValues.operatorSymbols,...keySymbolValues.serviceSymbols, ...keySymbolValues.auxSymbols]
     keyHandlers = this.keySymbols.map((keySymbol)=>{
         return this.addKeyHandler(keySymbol)
     })
