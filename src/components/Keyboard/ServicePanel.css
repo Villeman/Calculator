@@ -6,6 +6,9 @@
 }
 
 .servicePanel .calcButton {
-    background-color: rgb(156, 156, 156);
+    background-color: #CACACC;
     font-size: 20px;
+}
+.servicePanel .calcButton:hover {
+    background-color: #b3b3b3;
 }

@@ -1,17 +1,17 @@
 body {
   padding-top: 20px;
 }
-.displayArea {
-    padding: 0 10px;
-    height: 40px;
+.displayValue {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    font-size: 50px;
+    padding: 0 2%;
+    height: 60px;
     width: 240px;
-    background-color: #FFF;
     box-sizing: border-box;
     background-color: #000;
-  }
-  .displayValue {
-    text-align: right;
-    font-size: 30px;
-    margin: 0;
     color: #FFF;
+    text-align: right;
+    margin: 0;
   }

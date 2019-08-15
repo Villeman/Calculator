@@ -4,40 +4,42 @@ import './NumPad.css'
 import './ServicePanel.css'
 import './OperatorPanel.css'
 import CalcButton from '../Button'
-
+import KeyHandler, { KEYDOWN } from 'react-key-handler'
+import {keySymbolValues} from './constants'
 
 class Keyboard extends React.Component {
     state = {
-        lastPressedNum:0,
-        lastPressedOperator:0
+        lastPressedButton: 0
     }
     receiveSymbol = (val) => {
-        this.setState({ lastPressedNum: val }, () => {
-            this.props.onNumberClick(this.state.lastPressedNum)
+        this.setState({ lastPressedButton: val }, () => {
+            this.props.onNumberClick(this.state.lastPressedButton)
         })
     }
-    renderButton (i) {
-        return <CalcButton onNumberClicked = {this.receiveSymbol} key={'key-'+i} value={i}/>
+    renderButton = arrayItem => {
+        return <CalcButton onNumberClicked = {this.receiveSymbol} key={'key-'+arrayItem} value={arrayItem}/>
     }
-    numPadSymbols = ['0', '.', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    operatorSymbols = ['÷', '×', '-', '+', '=']
-    serviceSymbols = ['AC', '±', '%']
-    serviceButtons = this.serviceSymbols.map((symbol)=> {
-        return this.renderButton(symbol)
-    })
-    operatorButtons = this.operatorSymbols.map((symbol)=> {
-        return this.renderButton(symbol)
-    })
-    numPadButtons = this.numPadSymbols.map((symbol)=> {
-        return this.renderButton(symbol)
-    })
+    addKeyHandler = (keyValue) => {
+        return <KeyHandler key={'key-'+keyValue} keyValue={keyValue} keyEventName={KEYDOWN} onKeyHandle={this.keyboardHandler} />
+    }
+    keyboardHandler = (event) => {
+        this.receiveSymbol(event.key)
+    }
     
+    renderNumPadButtons = () => keySymbolValues.numPadSymbols.map(this.renderButton)
+    renderServiceButtons = () => keySymbolValues.serviceSymbols.map(this.renderButton)
+    renderOperatorButtons = () => keySymbolValues.operatorSymbols.map(this.renderButton)
+    keySymbols = [...keySymbolValues.numPadSymbols, ...keySymbolValues.operatorSymbols,...keySymbolValues.serviceSymbols, ...keySymbolValues.auxSymbols]
+    keyHandlers = this.keySymbols.map((keySymbol)=>{
+        return this.addKeyHandler(keySymbol)
+    })
     render () {
         return (
             <div className="keyboard">
-                <div className="servicePanel">{this.serviceButtons}</div>
-                <div className="numPad">{this.numPadButtons}</div>
-                <div className="operatorPanel">{this.operatorButtons}</div>
+                {this.keyHandlers}
+                <div className="servicePanel">{this.renderServiceButtons()}</div>
+                <div className="numPad">{this.renderNumPadButtons()}</div>
+                <div className="operatorPanel">{this.renderOperatorButtons()}</div>
             </div>
         )
     }
